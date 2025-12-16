@@ -1,0 +1,1 @@
+//Le Peintre (wind). Exécuté pour chaque pixel dessiné. Il décide de quelle couleur il doit être.
