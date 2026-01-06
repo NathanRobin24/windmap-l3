@@ -19,7 +19,13 @@ function resize() {
 }
 window.addEventListener("resize", () => {
   resize();
-  drawMap(); // redessiner la carte après resize
+  if (landFeature) {
+    projection = d3
+      .geoNaturalEarth1()
+      .fitSize([window.innerWidth, window.innerHeight], landFeature);
+    path = d3.geoPath(projection, mapCtx);
+  }
+  drawMap(); // redessiner la carte après avoir recalculé la projection
 });
 resize();
 
@@ -38,6 +44,10 @@ async function loadWorld() {
   path = d3.geoPath(projection, mapCtx);
 
   drawMap();
+
+  seedParticles();
+
+  requestAnimationFrame(animateParticles);
 }
 
 function drawMap() {
@@ -61,3 +71,63 @@ function drawMap() {
 }
 
 loadWorld();
+
+// --------------------
+// Étape 2 : Particules (mouvement simple, pas encore le vent)
+// --------------------
+const N = 12000;
+const particles = [];
+
+function randLon() {
+  return -180 + Math.random() * 360;
+}
+function randLat() {
+  return -60 + Math.random() * 120;
+} // évite les pôles au début
+
+function seedParticles() {
+  particles.length = 0;
+  for (let i = 0; i < N; i++) {
+    particles.push({
+      lon: randLon(),
+      lat: randLat(),
+    });
+  }
+}
+
+function animateParticles(t) {
+  // fade pour traînées sans noircir le canvas (préserve la transparence)
+  particlesCtx.save();
+  particlesCtx.globalCompositeOperation = "destination-in";
+  // Multiplie l'alpha existante: <1 = disparition progressive des anciens pixels
+  particlesCtx.fillStyle = "rgba(0,0,0,0.96)"; // 0.96 = lente disparition
+  particlesCtx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+  particlesCtx.restore();
+
+  // dessiner des points
+  particlesCtx.fillStyle = "rgba(255,255,255,0.7)";
+
+  for (const p of particles) {
+    // Mouvement SIMPLE (temporaire) : dérive vers l’est + petite oscillation
+    p.lon += 0.08;
+    p.lat += 0.02 * Math.sin(t * 0.001 + p.lon * 0.05);
+
+    // wrap longitude
+    if (p.lon > 180) p.lon -= 360;
+    if (p.lon < -180) p.lon += 360;
+
+    // clamp latitude
+    if (p.lat > 85) p.lat = 85;
+    if (p.lat < -85) p.lat = -85;
+
+    // projeter (lon/lat -> pixels)
+    const xy = projection([p.lon, p.lat]);
+    if (!xy) continue;
+
+    const x = xy[0],
+      y = xy[1];
+    particlesCtx.fillRect(x, y, 1, 1);
+  }
+
+  requestAnimationFrame(animateParticles);
+}
