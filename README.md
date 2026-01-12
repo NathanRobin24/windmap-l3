@@ -1,11 +1,10 @@
 # windmap-l3
 
-Simple D3 world map with a canvas particle layer.
+Simple D3 world map rendered to a single canvas.
 
 ## What it does
 
 - Renders a world map using D3 `geoNaturalEarth1` and TopoJSON land.
-- Animates random particles on a separate canvas with simple drift and trails.
 - Handles HiDPI correctly and resizes responsively.
 
 ## Run locally
@@ -24,13 +23,11 @@ http://localhost:8000
 
 ## Tuning
 
-- `js/main.js` → `N`: number of particles (default: 12000).
-- Particle color/opacity: change `particlesCtx.fillStyle`.
 - Map fill: change `mapCtx.fillStyle` before `mapCtx.fill()`.
 
 ## Files
 
-- `index.html`: two stacked canvases (`map`, `particles`), D3 + TopoJSON includes.
-- `js/main.js`: map drawing, projection setup, particle seeding/animation.
+- `index.html`: single canvas (`map`), D3 + TopoJSON includes.
+- `js/main.js`: map drawing and projection setup.
 - `data/world-110m.json`: TopoJSON world.
-- `css/style.css`: full-viewport, layered transparent canvases.
+- `css/style.css`: full-viewport canvas styling.
