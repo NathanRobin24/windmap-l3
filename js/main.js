@@ -1,17 +1,29 @@
 const mapCanvas = document.getElementById("map");
 const mapCtx = mapCanvas.getContext("2d");
 
+// particles overlay canvas (for trails)
+const particlesCanvas = document.getElementById("particles");
+const particlesCtx = particlesCanvas.getContext("2d");
+
 function resize() {
   const dpr = window.devicePixelRatio || 1;
   const px = Math.floor(window.innerWidth * dpr);
   const py = Math.floor(window.innerHeight * dpr);
 
+  // size map canvas
   mapCanvas.width = px;
   mapCanvas.height = py;
   mapCanvas.style.width = window.innerWidth + "px";
   mapCanvas.style.height = window.innerHeight + "px";
 
+  // size particles overlay
+  particlesCanvas.width = px;
+  particlesCanvas.height = py;
+  particlesCanvas.style.width = window.innerWidth + "px";
+  particlesCanvas.style.height = window.innerHeight + "px";
+
   mapCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  particlesCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
 window.addEventListener("resize", () => {
@@ -23,6 +35,7 @@ window.addEventListener("resize", () => {
     path = d3.geoPath(projection, mapCtx);
   }
   drawMap();
+  startParticles();
 });
 
 resize();
@@ -42,6 +55,7 @@ async function loadWorld() {
   path = d3.geoPath(projection, mapCtx);
 
   drawMap();
+  startParticles();
 }
 
 function drawMap() {
@@ -65,3 +79,76 @@ function drawMap() {
 }
 
 loadWorld();
+
+// ------------------ PARTICLES ------------------
+const PARTICLE_COUNT = 2000;
+const particles = [];
+let animId = null;
+
+function randomLonLat() {
+  return [-180 + Math.random() * 360, -85 + Math.random() * 170];
+}
+
+function seedParticles() {
+  particles.length = 0;
+  for (let i = 0; i < PARTICLE_COUNT; i++) {
+    const [lon, lat] = randomLonLat();
+    particles.push({
+      lon,
+      lat,
+      age: Math.random() * 100,
+    });
+  }
+}
+
+function stepParticles() {
+  for (const p of particles) {
+    // Fake wind for now: drift east + slight wave
+    p.lon += 0.35;
+    p.lat += Math.sin(p.lon * 0.05) * 0.03;
+
+    p.age += 1;
+
+    if (p.lon > 180) p.lon = -180;
+    if (p.lat > 85) p.lat = 85;
+    if (p.lat < -85) p.lat = -85;
+
+    if (p.age > 140) {
+      const [lon, lat] = randomLonLat();
+      p.lon = lon;
+      p.lat = lat;
+      p.age = 0;
+    }
+  }
+}
+
+function drawFrame() {
+  // fade previous particles slightly to create trails
+  particlesCtx.save();
+  particlesCtx.globalCompositeOperation = "destination-in";
+  particlesCtx.fillStyle = "rgba(0,0,0,0.92)"; // higher alpha = faster fade
+  particlesCtx.fillRect(0, 0, particlesCanvas.width, particlesCanvas.height);
+  particlesCtx.restore();
+
+  // draw current particles on the overlay canvas
+  particlesCtx.beginPath();
+  for (const p of particles) {
+    const xy = projection([p.lon, p.lat]);
+    if (!xy) continue;
+    const [x, y] = xy;
+    particlesCtx.moveTo(x + 1, y);
+    particlesCtx.arc(x, y, 0.8, 0, Math.PI * 2);
+  }
+  particlesCtx.fillStyle = "rgba(255,255,255,0.9)";
+  particlesCtx.fill();
+
+  stepParticles();
+  animId = requestAnimationFrame(drawFrame);
+}
+
+function startParticles() {
+  if (!projection) return;
+  seedParticles();
+  if (animId) cancelAnimationFrame(animId);
+  drawFrame();
+}
