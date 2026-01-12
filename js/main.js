@@ -101,15 +101,27 @@ function seedParticles() {
   }
 }
 
+function getWind(lon, lat, t) {
+  // placeholder field (replace with your dataset later)
+  const u = 10; // east
+  const v = Math.sin((lon + t * 20) * 0.05) * 5;
+  return [u, v];
+}
+
 function stepParticles() {
+  const dt = 0.016;
+  const t = performance.now() * 0.001;
+
   for (const p of particles) {
-    // Fake wind for now: drift east + slight wave
-    p.lon += 0.35;
-    p.lat += Math.sin(p.lon * 0.05) * 0.03;
+    const [u, v] = getWind(p.lon, p.lat, t);
+
+    p.lon += u * dt * 0.05;
+    p.lat += v * dt * 0.05;
 
     p.age += 1;
 
     if (p.lon > 180) p.lon = -180;
+    if (p.lon < -180) p.lon = 180;
     if (p.lat > 85) p.lat = 85;
     if (p.lat < -85) p.lat = -85;
 
