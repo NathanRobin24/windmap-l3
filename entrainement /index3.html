@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>D3 arc rotation</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+
+<svg id="chart" width="400" height="400"></svg>
+
+<script>
+const width = 400;
+const height = 400;
+const r = 120;
+
+const svg = d3.select("#chart")
+  .append("g")
+  .attr("transform", `translate(${width/2}, ${height/2})`);
+
+// données d’un seul arc
+const data = {
+  startAngle: 0,
+  endAngle: Math.PI / 2
+};
+
+// générateur d’arc
+const arc = d3.arc()
+  .innerRadius(60)
+  .outerRadius(r);
+
+// groupe qui va tourner
+const gArc = svg.append("g");
+
+const path = gArc.append("path")
+  .datum(data)
+  .attr("d", arc)
+  .attr("fill", "steelblue");
+
+// animation de rotation
+let angle = 0;
+
+d3.timer(() => {
+  angle += 0.5; // degrés
+  gArc.attr("transform", `rotate(${angle})`);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Carte du monde en D3</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+
+<svg id="map" width="900" height="500"></svg>  // Un canevas SVG pour dessiner la carte
+<script>
+// Dimensions du canevas
+const width = 900;
+const height = 500;
+// Sélection du canevas SVG
+const svg = d3.select("#map");
+
+// La projection (transforme (longitude, latitude) → écran)
+const projection = d3.geoNaturalEarth1()
+  .scale(170)// échelle de la projection
+  .translate([width / 2, height / 2]);// centre de la carte
+
+// Générateur de chemins(transforme un pays GeoJSON → chemin SVG)
+const path = d3.geoPath().projection(projection);
+
+// données du monde
+d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson")
+  .then(function(data) { //chargement des données GeoJSON
+
+    svg.selectAll("path") //un <path> par pays
+      .data(data.features) //liaison des données
+      .enter()
+      .append("path")// création des éléments <path>
+      .attr("d", path) // définition de l'attribut "d" avec le générateur de chemins
+      .attr("fill", "#cccccc") // couleur de remplissage des pays
+      .attr("stroke", "black"); // couleur des frontières des pays
+
+  });
+
+</script>
+
+</body>
+</html>
