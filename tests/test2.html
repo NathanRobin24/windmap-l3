@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <h1>Cercle généré par D3</h1>
+    <div id="zone-dessin"></div>
+
+    <script>
+        // 1. Créer le SVG (le conteneur)
+        const svg = d3.select("#zone-dessin")
+            .append("svg")
+            .attr("width", 1080)
+            .attr("height", 920);
+
+        // 2. Créer le cercle et appliquer tous les styles
+        svg.append("circle")
+            .attr("class", "target") // On lui donne la classe target
+            .attr("cx", 400)          // Position X
+            .attr("cy", 300)          // Position Y
+            .attr("r", 40)           // Rayon
+            .style("fill", "#69b3a2") // Couleur de fond
+            .style("stroke", "black") // Couleur du contour
+            .style("stroke-width", 10); // Épaisseur du contour (ce que tu voulais)
+    </script>
+</body>
+</html>

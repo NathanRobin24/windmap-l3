@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <h1 style="color: rgb(255, 0, 0);">Projet Windmap</h1>
+    <div id="viz"></div>
+
+    <script>
+        // Vérification immédiate
+        console.log("D3 est chargé :", typeof d3 !== 'undefined');
+
+        const svg = d3.select("#viz")
+            .append("svg")
+            .attr("width", 400)
+            .attr("height", 400)
+            .style("background", "yellow"); // On met un fond jaune pour être sûr de voir le SVG
+
+        // Premier carré (Rouge)
+        svg.append("rect")
+            .attr("x", 50)      // Départ à 50
+            .attr("y", 50)
+            .attr("width", 100)
+            .attr("height", 100)
+            .attr("fill", "red");
+
+// Deuxième carré (Vert) - Côte à côte
+    svg.append("rect")
+        .attr("x", 160)     // Départ à 160 (50 + 100 de largeur + 10 d'espace)
+        .attr("y", 50)      // Même hauteur pour qu'ils soient alignés
+        .attr("width", 100)
+        .attr("height", 100)
+        .attr("fill", "green");
+
+    svg.append("circle")
+    </script>
+</body>
+</html>

@@ -21,8 +21,6 @@ h1 {
     margin-top: 20px; /* Espace entre le titre et la carte */
 }
 
-#ma-carte:click
-
 /* La classe ".pays" que le Javascript va donner aux formes des pays */
 .pays {
     fill: #ffffff;      /* Remplissage blanc pour la terre */
