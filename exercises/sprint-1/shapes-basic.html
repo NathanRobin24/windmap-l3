@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>First D3 Document</h1>
+
+    <!-- Add a bit of text -->
+    <h2>Baic shapes</h2>
+
+    <!-- Add a svg shape -->
+    <svg>
+        <!-- Top left corner position is (0,0) -->
+        <!-- cx: position on x axis, cy: position on y axis, r: for circle radius -->
+        <circle style="fill: #e2075b" stroke="black" cx=50 cy=50 r=40></circle>
+
+        <!--  position on x axis, position on y axis, width and height are for the size of the rectangle -->
+        <rect style="fill: #48ff00" stroke="black" x="200" y="20" width="80" height="80"></rect>
+    </svg>
+
+    <h2>Shapes in a zone</h2>
+
+    <!-- Add a svg area, empty -->
+    <svg id="area" height=200 width=450></svg>
+
+    <!-- Load d3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <script>
+        // these three containers will be placed right after each other 
+        // and in the case where the place is taken, container will be placed below
+        const svg = d3.select("#area")
+            svg.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", 450)
+            .attr("height", 200)
+            .attr("fill", "#fbff00ec");
+
+        svg.append("circle")
+            .attr("cx", 70).attr("cy", 30).attr("r", 40).style("fill", "blue");
+        svg.append("circle")
+            .attr("cx", 140).attr("cy", 70).attr("r", 40).style("fill", "red");
+        svg.append("circle")
+            .attr("cx", 300).attr("cy", 100).attr("r", 40).style("fill", "green");
+
+
+        const svg2 = d3.select("body")
+            .append("svg")
+            .attr("width", 450)
+            .attr("height", 200);
+
+        svg2.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", 450)
+            .attr("height", 200)
+            .attr("fill", "#6f00ff");
+
+        const svg3 = d3.select("body")
+            .append("svg")
+            .attr("width", 450)
+            .attr("height", 200)
+            .style("display", "block")
+            .style("margin", "20px auto"); // auto left/right => centered
+
+        svg3.append("rect")
+            .attr("width", 450)
+            .attr("height", 200)
+            .attr("fill", "#00c2ff");
+    </script>
+
+    <h2>Shape interactions</h2><br>
+    <script>
+        const width1 = 60;
+        const height1 = 120;
+        const width2 =  300;
+        const height2 = 120;
+
+        const svg4 = d3.select("body")
+            .append("svg")
+            .attr("width", 600)
+            .attr("height", 600);
+
+        svg4.append("rect")
+            .attr("width", 600)
+            .attr("height", 600)
+            .attr("fill", "#ff9900");
+
+        const a = svg4.append("rect")
+            .attr("x", width1)
+            .attr("y", height1)
+            .attr("width", 100)
+            .attr("height", 100)
+            .attr("fill", "#48ff00")
+            .attr("stroke", "black");
+
+        const b = svg4.append("rect")
+            .attr("x", width2)
+            .attr("y", height2)
+            .attr("width", 100)
+            .attr("height", 100)
+            .attr("fill", "#48ff00")
+            .attr("stroke", "black");
+
+        
+        const size = 100;
+        const gap = 0;
+
+        function moveSquare(otherSquare, x, y) {
+            otherSquare.transition()
+            .duration(250)
+            .attr("x", x)
+            .attr("y", y);
+        }
+
+        function reset() {
+            moveSquare(a, width1, height1);
+            moveSquare(b, width2, height2);
+        }
+
+        function attach(otherSquare, anchorX, anchorY) {
+            const attachedY = anchorY;
+            if (otherSquare == a) {
+                console.log("a");
+                const attachedX = anchorX - gap - size; //b.attr("x") = 300  so 300 - 100 = 200
+                moveSquare(otherSquare, attachedX, attachedY);
+            } else {
+                console.log("b");
+                const attachedX = anchorX + gap + size; //a.attr("x") = 120  so 120 + 100 = 220
+                moveSquare(otherSquare, attachedX, attachedY);
+            }    
+        }
+
+        let linked = false;
+        let lastAnchor = null;
+
+        function handleClick(square) {
+            if (!linked) {
+                linked = true;
+                lastAnchor = square;
+                if (square == "a") {
+                    attach(b, +a.attr("x"), +a.attr("y")); // + is for conversion of string to numeric
+                } else {
+                    attach(a, +b.attr("x"), +b.attr("y"));
+                }
+            } else {
+                linked = false;
+                lastAnchor = null;
+                reset();
+            }
+        }
+        
+        a.on("click", function() { handleClick("a"); });
+        b.on("click", function() { handleClick("b"); });
+
+    </script>
+
+</body>
+</html>
