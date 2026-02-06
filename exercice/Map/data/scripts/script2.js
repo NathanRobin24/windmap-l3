@@ -9,14 +9,15 @@ const svg = d3.select("#ma-carte") // "Trouve la div qui a l'id 'ma-carte'"
     .attr("height", hauteur);      // "Règle sa hauteur à 600"
 
 // --- 2. LA MATHÉMATIQUE (Projection) ---
-const projection = d3.geoMercator() // "Utilise la formule de Mercator (carte classique)"
-    .center([0, 20])                // "Regarde vers le centre du monde (Lat 20, Lon 0)"
-    .scale(120)                     // "Niveau de zoom"
-    .translate([largeur / 2, hauteur / 2]); // "Place le centre de la carte au centre de mon SVG"
+    let rotationActuelle = [-20, -10, 0]; //coordonnée de rotation quand on va cliquer plus tard
+    const projection = d3.geoOrthographic() // "Utilise la formule globe 3D"               
+    .rotate(rotationActuelle)
+    .scale(250)                     // "Niveau de zoom"
+    .translate([largeur / 2, hauteur / 2]); // "Place le centre de la carte au centre de mon SVG" (indispensable)
 
 // --- 3. LE CRAYON (Path Generator) ---
 // C'est l'outil qui va convertir les coordonnées GPS en dessin SVG
-const path = d3.geoPath().projection(projection); // "Crayon, utilise la projection ci-dessus"
+const path = d3.geoPath().projection(projection); // "Crayon, utilise la projection ci-dessus" 
 
 // --- 4. CHARGEMENT DES DONNÉES (Le moment critique) ---
 // d3.json va chercher le fichier des frontières sur internet
@@ -51,6 +52,17 @@ d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/w
             .attr("cy", d => projection([d.long, d.lat])[1]) // "Calcule la position Y sur l'écran"
             .attr("r", d => d.qte / 10)                      // "Rayon = Quantité divisée par 10"
             .attr("class", "point-plastique");               // "Applique le style rouge du CSS"
+        
+        svg.on("click", function() {
+            rotationActuelle[0] += 10;           // On change la valeur de la longitude (on tourne de 10 degrés)
+            projection.rotate(rotationActuelle); // On met à jour la projection avec la nouvelle rotation
+            svg.selectAll(".pays")               // On redessine les pays (car on change les coordonées)
+            .attr("d", path);
+            svg.selectAll(".point-plastique")    // On redessine les points de plastique
+            .attr("x", d => projection([d.long, d.lat])[0] - (d.qte / 10))
+            .attr("y", d => projection([d.long, d.lat])[1] - (d.qte / 10));
+            console.log("Nouvelle rotation : " + rotationActuelle[0]);
+        });
 
         console.log("ça marche!"); // Affiche un message dans la console (F12) si tout marche
     })
