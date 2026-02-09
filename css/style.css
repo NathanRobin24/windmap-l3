@@ -33,3 +33,17 @@ canvas {
 .exercise-link:hover {
   background: rgba(37, 99, 235, 0.9);
 }
+
+.exercise-links {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exercise-links .exercise-link {
+  position: static;
+}
