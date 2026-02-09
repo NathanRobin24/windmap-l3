@@ -1,25 +1,37 @@
 <!doctype html>
+<!-- Page de l'exercice D3 n°1 (rectangles) -->
 <html lang="fr">
   <head>
+    <!-- Encodage et affichage mobile -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Titre de l'onglet -->
     <title>Exercice D3</title>
+    <!-- Feuille de style dédiée à cet exercice -->
     <link rel="stylesheet" href="css/d3-exo.css" />
   </head>
   <body>
+    <!-- En-tête de la page -->
     <header class="page-header">
       <h1>Exercice D3</h1>
+      <!-- Petit texte d'objectif -->
       <p>Objectif : afficher des rectangles colorés selon un seuil.</p>
+      <!-- Lien de retour vers la carte principale -->
       <a class="back-link" href="index.html">Retour à la carte</a>
     </header>
 
+    <!-- Contenu principal -->
     <main class="container">
+      <!-- Bloc qui contient le SVG -->
       <section class="chart-card">
+        <!-- Zone D3 : le script dessine ici -->
         <svg id="chart" aria-label="Rectangles de températures"></svg>
       </section>
     </main>
 
+    <!-- Bibliothèque D3 -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- Script de l'exercice -->
     <script src="js/d3-exo.js"></script>
   </body>
 </html>
