@@ -53,4 +53,4 @@ d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/w
         console.log("ça marche!"); // Affiche un message dans la console (F12) si tout marche
     })
     .catch(error => console.error("Erreur de chargement :", error)); 
-    // Si internet coupe ou que l'URL est fausse, ça affiche l'erreur ici.
+    // Si internet coupe ou que l'URL est fausse, ça affiche l'erreur ici. 

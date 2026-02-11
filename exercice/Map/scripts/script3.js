@@ -33,7 +33,6 @@ d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/w
             .join("path")          // "Crée un chemin pour chaque pays"
             .attr("d", path)       // "Utilise le crayon 'path' pour tracer la forme"
             .attr("class", "pays");// "Donne-leur la classe CSS 'pays' (pour qu'ils soient blancs)"
-            
         // 1. On configure le comportement de "glissement"
         const comportementDrag = d3.drag()
             .on("drag", function(event) { // "event" contient dx (déplacement X) et dy (déplacement Y)

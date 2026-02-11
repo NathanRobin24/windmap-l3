@@ -27,15 +27,13 @@ svg.selectAll("rect")
 svg.selectAll("text")
     .data(donnee)
     .join("text")
-    // 1. Positionnement : à droite du rectangle
+    // Positionnement : à droite du rectangle
     // On prend la largeur du rectangle (d * 2) et on ajoute 10px de marge
     .attr("x", d => (d * 2) + 10) 
     
     // On centre le texte verticalement par rapport à la barre
     // (i * 35) pour la ligne, + 20 pour descendre au milieu des 30px de hauteur
     .attr("y", (d, i) => (i * 35) + 20) 
-    
-    // 2. Le contenu du texte (La partie "Logique")
     .text(d => {
         if (d > 100) {
             return d + " : TROP !";
