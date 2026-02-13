@@ -1,1 +1,0 @@
-//Le Géomètre (wind). Executé une fois pour chaque particule. Il décide où elle se trouve sur l'écran.

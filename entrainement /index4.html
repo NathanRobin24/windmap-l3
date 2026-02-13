@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">  
+  <title>D3 bar chart simple</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>  // Importation de la bibliothèque D3.js depuis un CDN
+</head>
+<body>
+
+<svg id="chart" width="600" height="350"></svg> 
+
+<script>
+
+//Les données choisies pour le graphe (une note par matière)
+const data = [ 
+  { name: "Mathématiques", note: 14 },
+  { name: "Bases de données", note: 18 },
+  { name: "IA", note: 15 },
+  { name: "Bioinformatique", note: 12 }
+];
+
+
+// SVG et dimensions 
+const svg = d3.select("#chart"); // svg surface pour dessiner le graphe
+
+const width = 600; // largeur totale du SVG
+const height = 350; // marge pour les axes (on ne dessine pas les barres dans la marge)
+
+const margin = { top: 20, right: 20, bottom: 50, left: 50 }; // marges pour les axes (espace entre les barres et les axes)
+
+const innerWidth  = width  - margin.left - margin.right; // hauteur disponible pour les barres (on soustrait les marges)
+const innerHeight = height - margin.top  - margin.bottom; // hauteur disponible pour les barres (on soustrait les marges)
+
+// groupe principal (tout ce qu'on dessine, à l'intérieur des marges)
+const g = svg.append("g") // créer un groupe <g> pour contenir les éléments du graphe
+  .attr("transform", `translate(${margin.left},${margin.top})`); // déplacer le groupe pour respecter les marges (on décale tout vers la droite et vers le bas) 
+
+
+// Echelle X (matières)
+const x = d3.scaleBand() // scaleBand est une échelle pour les données catégorielles (ici les matières)
+  .domain(data.map(d => d.name)) //  le domaine de l'échelle est la liste des matières (on extrait les noms des matières pour les utiliser comme catégories)
+  .padding(0.2);  // espacement entre les barres (20% de la largeur de chaque bande)
+
+
+// Echelle Y (notes)
+const y = d3.scaleLinear() // scaleLinear est une échelle pour les données numériques (ici les notes)
+  .domain([0, 20])
+  .range([innerHeight, 0]); // le domaine de l'échelle est de 0 à 20 (les notes vont de 0 à 20)
+
+
+// Barres
+
+g.selectAll("rect") // sélectionne tous les éléments <rect> (il n'y en a pas encore, mais c'est la syntaxe pour faire du data binding)
+  .data(data) 
+  .enter()
+  .append("rect")
+  .attr("x", d => x(d.name)) // position horizontale de la barre (en fonction de la matière)
+  .attr("y", d => y(d.note))  // position verticale de la barre (en fonction de la note, plus la note est élevée, plus la barre est haute)
+  .attr("width", x.bandwidth()) // largeur de la barre (égale à la largeur de chaque bande définie par scaleBand)
+  .attr("height", d => innerHeight - y(d.note))   // hauteur de la barre (calculée à partir de la position y, plus la note est élevée, plus la barre est haute)
+  .attr("fill", "steelblue");   // couleur de remplissage des barres
+
+
+// Labels (valeurs)
+
+g.selectAll(".label")
+  .data(data) 
+  .enter() 
+  .append("text")
+  .attr("class", "label")
+  .text(d => d.note)
+  .attr("x", d => x(d.name) + x.bandwidth() / 2)
+  .attr("y", d => y(d.note) - 5)
+  .attr("text-anchor", "middle")
+  .attr("font-size", "11px");
+
+
+// Axe X
+
+g.append("g")
+  .attr("transform", `translate(0,${innerHeight})`)
+  .call(d3.axisBottom(x));
+
+
+// Axe Y
+g.append("g")
+  .call(d3.axisLeft(y));
+
+</script>
+</body>
+</html>
