@@ -1,0 +1,59 @@
+body {
+    background-color: #f8f9fa; /* Gris très clair pour le fond global de la page */
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Police d'écriture moderne */
+    display: flex; /* Active le mode "Flexbox" (mise en page flexible) */
+    flex-direction: column; /* Aligne les éléments (Titre, Carte, Texte) verticalement */
+    align-items: center; /* Centre tout horizontalement au milieu de l'écran */
+    margin: 0; /* Enlève les marges blanches par défaut du navigateur */
+    padding: 20px; /* Ajoute un peu d'espace tout autour de la page */
+}
+
+h1 {
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+/* On cible l'élément SVG qui se trouve DANS la div #ma-carte */
+#map svg {
+    background-color: #0f172a; /* Bleu clair -> C'est la couleur de l'OCÉAN ! */
+    border-radius: 12px; /* Arrondit les coins de la carte */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Ajoute une ombre portée pour l'effet 3D */
+    margin-top: 20px; /* Espace entre le titre et la carte */
+}
+
+.ocean {
+    fill: #1e293b;
+    stroke: #03264e;
+
+}
+
+/* La classe ".pays" que le Javascript va donner aux formes des pays */
+.countries {
+    fill: #64748b;      /* Remplissage blanc pour la terre */
+    stroke: #adb5bd;    /* Contour gris clair pour les frontières */
+    stroke-width: 0.5px; /* Épaisseur du trait de frontière */
+    transition: fill 1s ease; /* Animation : si la couleur change, ça prend 0.3s (douceur) */
+}
+
+.countries.selected {
+    stroke: white;
+    stroke-width: 1px;
+ }
+
+.incomeText {
+    fill: white;
+    font-weight: bold;
+    font-size: 14px;
+    pointer-events: none;
+}
+
+/* Ce qui se passe quand la souris survole un pays */
+.countries:hover {
+    cursor: grab;      /* Le curseur devient une main */
+    transition: fill 0.5s ease;
+}
+
+.countries:not(.selected):hover {
+  fill: #98dcf1;
+  cursor: grab;
+}
