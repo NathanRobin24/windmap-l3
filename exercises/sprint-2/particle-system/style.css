@@ -1,0 +1,19 @@
+body {
+    background-color: #f8f9fa; /* Gris très clair pour le fond global de la page */
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Police d'écriture moderne */
+    display: flex; /* Active le mode "Flexbox" (mise en page flexible) */
+    flex-direction: column; /* Aligne les éléments (Titre, Carte, Texte) verticalement */
+    align-items: center; /* Centre tout horizontalement au milieu de l'écran */
+    margin: 0; /* Enlève les marges blanches par défaut du navigateur */
+    padding: 20px; /* Ajoute un peu d'espace tout autour de la page */
+}
+
+
+h1 {
+    margin: auto;
+    text-align: center;
+}
+
+#zone-1 svg {
+    background-color: #000000;
+}
