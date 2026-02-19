@@ -8,8 +8,8 @@ body {
     padding: 20px; /* Ajoute un peu d'espace tout autour de la page */
 }
 
-#ma-carte svg {
-    background-color: #d0ebff; /* Bleu clair -> C'est la couleur de l'OCÉAN ! */
+#map svg {
+    background-color: #021e33; /* Bleu clair -> C'est la couleur de l'OCÉAN ! */
     border-radius: 12px; /* Arrondit les coins de la carte */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Ajoute une ombre portée pour l'effet 3D */
     margin-top: 20px; /* Espace entre le titre et la carte */
